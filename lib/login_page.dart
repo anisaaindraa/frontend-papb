@@ -1,7 +1,6 @@
-// login_page.dart
 import 'package:flutter/material.dart';
 import 'register_page.dart';
-import 'home_page.dart';
+import 'main.dart'; // Untuk HomePageWithNav
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,10 +17,12 @@ class _LoginPageState extends State<LoginPage> {
     // Dummy login check
     if (_emailController.text == 'admin' &&
         _passwordController.text == 'password') {
-      // Navigate to home page if login is successful
+      // Navigate to home page with navigation bar if login is successful
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(
+            builder: (context) =>
+                const HomePageWithNav()), // Pindah ke HomePageWithNav
       );
     } else {
       // Show error if login fails
