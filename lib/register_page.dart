@@ -9,11 +9,13 @@ class RegisterPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
+              Colors.purple,
               Color(0xFFB71C1C),
-              Color(0xFF880E4F)
+              Color(0xFF880E4F),
+              // Colors.amber,
             ], // Gradien merah senada
           ),
         ),
@@ -83,7 +85,7 @@ class RegisterPage extends StatelessWidget {
                   child: const Center(
                     child: Text(
                       'Register',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ),

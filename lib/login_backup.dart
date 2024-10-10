@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
           return AlertDialog(
             title: const Text('Login Failed'),
             content: const Text('Incorrect email or password.'),
+            backgroundColor: Colors.white,
             actions: [
               TextButton(
                 onPressed: () {
@@ -54,13 +55,12 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
-              Colors.purple,
               Color(0xFFB71C1C),
               Color(0xFF880E4F),
-              // Colors.amberAccent,
+              Colors.amberAccent,
             ], // Gradien warna merah
           ),
         ),

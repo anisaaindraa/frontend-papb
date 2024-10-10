@@ -13,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   bool inProgress = false;
   ResponseModel? responseModel;
   String noDataText = "Welcome, Start searching";
+  Set<String> favoriteWords = {}; // Set to store favorite words
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
             else if (responseModel != null)
               Expanded(child: _buildResponseWidget())
             else
-              _noDataWidget(), // Removed 'const' and directly called the widget-building method
+              _noDataWidget(),
           ],
         ),
       ),
@@ -46,13 +47,37 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        Text(
-          responseModel!.word!,
-          style: TextStyle(
-            color: Colors.purple.shade600,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              responseModel!.word!,
+              style: TextStyle(
+                color: Colors.purple.shade600,
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                favoriteWords.contains(responseModel!.word)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: favoriteWords.contains(responseModel!.word)
+                    ? Colors.red
+                    : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (favoriteWords.contains(responseModel!.word)) {
+                    favoriteWords.remove(responseModel!.word);
+                  } else {
+                    favoriteWords.add(responseModel!.word!);
+                  }
+                });
+              },
+            ),
+          ],
         ),
         Text(responseModel!.phonetic ?? ""),
         const SizedBox(height: 16),
@@ -62,7 +87,7 @@ class _HomePageState extends State<HomePage> {
             return _buildMeaningWidget(responseModel!.meanings![index]);
           },
           itemCount: responseModel!.meanings!.length,
-        ))
+        )),
       ],
     );
   }
@@ -145,7 +170,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchWidget() {
-    // Corrected return type to Widget
     return TextField(
       decoration: const InputDecoration(
         hintText: 'Search word here',
@@ -153,7 +177,7 @@ class _HomePageState extends State<HomePage> {
       ),
       onSubmitted: (value) {
         _getMeaningFromApi(value);
-        print('Searching for: $value'); // Example placeholder
+        print('Searching for: $value');
       },
     );
   }
