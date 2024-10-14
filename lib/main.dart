@@ -69,7 +69,7 @@ class _HomePageWithNavState extends State<HomePageWithNav> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
+        selectedItemColor: const Color.fromARGB(255, 146, 223, 186),
         onTap: _onItemTapped,
       ),
     );

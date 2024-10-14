@@ -19,7 +19,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: const Text('Dictionary Pad',
+            style: TextStyle(color: Colors.green)), // Set AppBar title color
+        backgroundColor: Colors.white, // Change AppBar background color
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,9 +29,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSearchWidget(),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             if (inProgress)
               const LinearProgressIndicator()
             else if (responseModel != null)
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             Text(
               responseModel!.word!,
               style: TextStyle(
-                color: Colors.purple.shade600,
+                color: Colors.green, // Change word text color to match login
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
               ),
@@ -79,7 +79,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        Text(responseModel!.phonetic ?? ""),
+        Text(responseModel!.phonetic ?? "",
+            style:
+                TextStyle(color: Colors.green)), // Change phonetic text color
         const SizedBox(height: 16),
         Expanded(
             child: ListView.builder(
@@ -101,6 +103,7 @@ class _HomePageState extends State<HomePage> {
 
     return Card(
       elevation: 4,
+      color: Colors.green[50], // Change card background color to match login
       child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -109,7 +112,7 @@ class _HomePageState extends State<HomePage> {
               Text(
                 meanings.partOfSpeech!,
                 style: TextStyle(
-                  color: Colors.orange.shade600,
+                  color: Colors.green, // Change part of speech color
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -123,7 +126,9 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 16,
                 ),
               ),
-              Text(definitionList),
+              Text(definitionList,
+                  style: TextStyle(
+                      color: Colors.black)), // Change definition color
               _buildSet("Synonyms", meanings.synonyms),
               _buildSet("Antonyms", meanings.antonyms),
             ],
@@ -145,11 +150,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 10),
-          Text(setList!
-              .toSet()
-              .toString()
-              .replaceAll("{", "")
-              .replaceAll("}", "")),
+          Text(
+              setList!
+                  .toSet()
+                  .toString()
+                  .replaceAll("{", "")
+                  .replaceAll("}", ""),
+              style: TextStyle(color: Colors.black)), // Change set list color
           const SizedBox(height: 10),
         ],
       );
@@ -164,7 +171,8 @@ class _HomePageState extends State<HomePage> {
       child: Center(
           child: Text(
         noDataText,
-        style: const TextStyle(fontSize: 20),
+        style: const TextStyle(
+            fontSize: 20, color: Colors.green), // Change no data text color
       )),
     );
   }
@@ -174,6 +182,11 @@ class _HomePageState extends State<HomePage> {
       decoration: const InputDecoration(
         hintText: 'Search word here',
         border: OutlineInputBorder(),
+        labelStyle: TextStyle(color: Colors.green), // Set hint text color
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.green, width: 2.0), // Change border color
+        ),
       ),
       onSubmitted: (value) {
         _getMeaningFromApi(value);
