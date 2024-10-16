@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/utils.dart';
 // import 'package:flutter_application_1/home_page.dart'; // Pastikan ini diimport agar HomePage dikenali
 
 class ProfilePage extends StatelessWidget {
@@ -8,7 +9,8 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green, // Warna hijau sesuai tema
+        backgroundColor:
+            ColorPalette.secondaryBackgroundColor, // Warna hijau sesuai tema
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -36,12 +38,12 @@ class ProfilePage extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: 115,
+          height: 100,
           decoration: const BoxDecoration(
-            color: Colors.green,
+            color: ColorPalette.secondaryBackgroundColor,
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(25),
-              bottomRight: Radius.circular(25),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
             ),
           ),
         ),
@@ -52,7 +54,7 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             children: [
               const CircleAvatar(
-                radius: 50,
+                radius: 40,
                 backgroundColor: Colors.white,
                 child: Icon(
                   Icons.person,
@@ -60,7 +62,7 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.green,
                 ), // Placeholder icon
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               const Text(
                 'Anisya',
                 style: TextStyle(
@@ -103,7 +105,7 @@ class ProfilePage extends StatelessWidget {
           prefixIcon: Icon(icon, color: Colors.green),
           hintText: value,
           filled: true,
-          fillColor: Colors.green[50],
+          fillColor: ColorPalette.thirdBackgroundColor,
           enabled: false, // Tidak bisa diedit langsung
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

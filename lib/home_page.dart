@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/api.dart';
 import 'package:flutter_application_1/response_model.dart';
+import 'package:flutter_application_1/utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,8 +21,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dictionary Pad',
-            style: TextStyle(color: Colors.green)), // Set AppBar title color
-        backgroundColor: Colors.white, // Change AppBar background color
+            style: TextStyle(color: Colors.black)), // Set AppBar title color
+        backgroundColor: ColorPalette
+            .secondaryBackgroundColor, // Change AppBar background color
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -80,8 +82,9 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         Text(responseModel!.phonetic ?? "",
-            style:
-                TextStyle(color: Colors.green)), // Change phonetic text color
+            style: TextStyle(
+                color: ColorPalette
+                    .textSecondaryColor)), // Change phonetic text color
         const SizedBox(height: 16),
         Expanded(
             child: ListView.builder(
@@ -103,7 +106,8 @@ class _HomePageState extends State<HomePage> {
 
     return Card(
       elevation: 4,
-      color: Colors.green[50], // Change card background color to match login
+      color: ColorPalette
+          .thirdBackgroundColor, // Change card background color to match login
       child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -112,7 +116,8 @@ class _HomePageState extends State<HomePage> {
               Text(
                 meanings.partOfSpeech!,
                 style: TextStyle(
-                  color: Colors.green, // Change part of speech color
+                  color: ColorPalette
+                      .textSecondaryColor, // Change part of speech color
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),

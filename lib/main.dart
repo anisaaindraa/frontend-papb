@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/utils.dart';
 import 'home_page.dart';
 import 'login_page.dart';
 import 'favorites_page.dart'; // Import halaman Favorites
@@ -34,12 +35,26 @@ class HomePageWithNav extends StatefulWidget {
 
 class _HomePageWithNavState extends State<HomePageWithNav> {
   int _selectedIndex = 0;
+  Set<String> favoriteWords = {"chat", "mobile", "love"}; // Kata dummy
 
-  static const List<Widget> _pages = <Widget>[
-    HomePage(), // Search Page
-    FavoritesPage(), // Favorites Page
-    ProfilePage(), // Profile Page
-  ];
+  // Fungsi untuk menghapus kata dari daftar favorit
+  void _removeFavorite(String word) {
+    setState(() {
+      favoriteWords.remove(word);
+    });
+  }
+
+  // Fungsi untuk mendapatkan halaman sesuai dengan index
+  List<Widget> _getPages() {
+    return [
+      HomePage(), // Search Page
+      FavoritesPage(
+        favoriteWords: favoriteWords,
+        onRemove: _removeFavorite,
+      ), // Favorites Page dengan kata favorit
+      ProfilePage(), // Profile Page
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -51,7 +66,7 @@ class _HomePageWithNavState extends State<HomePageWithNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _pages.elementAt(_selectedIndex),
+        child: _getPages().elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -69,7 +84,7 @@ class _HomePageWithNavState extends State<HomePageWithNav> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromARGB(255, 146, 223, 186),
+        selectedItemColor: ColorPalette.secondaryBackgroundColor,
         onTap: _onItemTapped,
       ),
     );
