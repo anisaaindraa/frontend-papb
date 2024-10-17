@@ -45,7 +45,7 @@ class _DetailFavPageState extends State<DetailFavPage> {
         title: Text(widget.word, style: const TextStyle(color: Colors.black)),
         backgroundColor: ColorPalette.secondaryBackgroundColor,
       ),
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _wordDetail != null

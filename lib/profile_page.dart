@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/edit_profile.dart';
 import 'package:flutter_application_1/utils.dart';
-// import 'package:flutter_application_1/home_page.dart'; // Pastikan ini diimport agar HomePage dikenali
+import 'package:flutter_application_1/login_page.dart'; // Import halaman login
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,13 +12,24 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor:
             ColorPalette.secondaryBackgroundColor, // Warna hijau sesuai tema
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(
-                context); // Navigasi kembali ke halaman sebelumnya (HomePage)
-          },
-        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.logout,
+              color: ColorPalette
+                  .errorColor, // Menggunakan color untuk mengatur warna ikon
+            ),
+            onPressed: () {
+              // Navigasi ke halaman login dan hapus semua rute sebelumnya
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+                (Route<dynamic> route) =>
+                    false, // Menghapus semua rute sebelumnya
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -120,7 +132,10 @@ class ProfilePage extends StatelessWidget {
   Widget _buildEditButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        // Logika untuk edit profil
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditProfilePage()),
+        );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.green,

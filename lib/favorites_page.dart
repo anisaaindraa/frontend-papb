@@ -49,7 +49,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: const Text('Favorites'),
         backgroundColor: ColorPalette.secondaryBackgroundColor,
       ),
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       body: (widget.favoriteWords != null && widget.favoriteWords!.isNotEmpty)
           ? ListView.builder(
               padding: const EdgeInsets.all(10.0),
