@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils.dart';
+import 'package:flutter_application_1/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'home_page.dart';
 import 'login_page.dart';
 import 'favorites_page.dart'; // Import halaman Favorites
-import 'profile_page.dart'; // Import halaman Profile
+import 'profile_page.dart';
+import 'quis_page.dart'; // Import halaman Quiz
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -47,12 +53,13 @@ class _HomePageWithNavState extends State<HomePageWithNav> {
   // Fungsi untuk mendapatkan halaman sesuai dengan index
   List<Widget> _getPages() {
     return [
-      HomePage(), // Search Page
+      const HomePage(), // Search Page
       FavoritesPage(
         favoriteWords: favoriteWords,
         onRemove: _removeFavorite,
       ), // Favorites Page dengan kata favorit
-      ProfilePage(), // Profile Page
+      const QuizPage(), // Quiz Page
+      const ProfilePage(), // Profile Page
     ];
   }
 
@@ -71,21 +78,28 @@ class _HomePageWithNavState extends State<HomePageWithNav> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search, color: Colors.green), // Set icon color
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(Icons.favorite, color: Colors.green), // Set icon color
             label: 'Favorites',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.quiz, color: Colors.green), // Set icon color
+            label: 'Quiz',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, color: Colors.green), // Set icon color
             label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: ColorPalette.secondaryBackgroundColor,
+        selectedItemColor: Colors.green, // Match the green theme
+        unselectedItemColor: Colors.black54, // Set a suitable unselected color
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed, // Make icons stay in place
+        backgroundColor: Colors.white, // Set background color of the navbar
       ),
     );
   }

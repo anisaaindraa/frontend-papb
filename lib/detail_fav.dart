@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/api.dart';
 import 'package:flutter_application_1/response_model.dart';
-import 'package:flutter_application_1/utils.dart';
+// import 'package:flutter_application_1/utils.dart';
 
 class DetailFavPage extends StatefulWidget {
   final String word; // Kata favorit yang dipilih
@@ -42,8 +42,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.word, style: const TextStyle(color: Colors.black)),
-        backgroundColor: ColorPalette.secondaryBackgroundColor,
+        title: Text(widget.word, style: const TextStyle(color: Colors.white)),
+        backgroundColor: Colors.green,
       ),
       backgroundColor: Colors.white,
       body: _isLoading
@@ -53,8 +53,7 @@ class _DetailFavPageState extends State<DetailFavPage> {
               : const Center(
                   child: Text(
                     'Failed to load word details.',
-                    style:
-                        TextStyle(fontSize: 18, color: ColorPalette.errorColor),
+                    style: TextStyle(fontSize: 18, color: Colors.red),
                   ),
                 ),
     );
@@ -71,15 +70,15 @@ class _DetailFavPageState extends State<DetailFavPage> {
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: ColorPalette.textPrimaryColor,
+              color: Colors.black87,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             _wordDetail!.phonetic ?? "",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
-              color: ColorPalette.textSecondaryColor,
+              color: Colors.black54,
             ),
           ),
           const SizedBox(height: 16),
@@ -105,7 +104,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
 
     return Card(
       elevation: 4,
-      color: ColorPalette.thirdBackgroundColor,
+      color: Colors
+          .green[50], // Warna latar belakang yang sama dengan halaman Favorites
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -117,7 +117,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: ColorPalette.textSecondaryColor,
+                color: Colors
+                    .green, // Konsisten dengan warna teks pada halaman Favorites
               ),
             ),
             const SizedBox(height: 8),

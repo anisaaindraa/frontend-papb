@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/edit_profile.dart';
-import 'package:flutter_application_1/utils.dart';
+// import 'package:flutter_application_1/utils.dart';
 import 'package:flutter_application_1/login_page.dart'; // Import halaman login
 
 class ProfilePage extends StatelessWidget {
@@ -10,14 +10,13 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            ColorPalette.secondaryBackgroundColor, // Warna hijau sesuai tema
+        backgroundColor: Colors.green, // Warna hijau sesuai tema
         actions: [
           IconButton(
             icon: const Icon(
               Icons.logout,
-              color: ColorPalette
-                  .errorColor, // Menggunakan color untuk mengatur warna ikon
+              color:
+                  Colors.white, // Menggunakan color untuk mengatur warna ikon
             ),
             onPressed: () {
               // Navigasi ke halaman login dan hapus semua rute sebelumnya
@@ -52,7 +51,7 @@ class ProfilePage extends StatelessWidget {
         Container(
           height: 100,
           decoration: const BoxDecoration(
-            color: ColorPalette.secondaryBackgroundColor,
+            color: Colors.green,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10),
@@ -117,7 +116,7 @@ class ProfilePage extends StatelessWidget {
           prefixIcon: Icon(icon, color: Colors.green),
           hintText: value,
           filled: true,
-          fillColor: ColorPalette.thirdBackgroundColor,
+          fillColor: Colors.green[50],
           enabled: false, // Tidak bisa diedit langsung
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

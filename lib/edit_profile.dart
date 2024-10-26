@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils.dart';
+// import 'package:flutter_application_1/utils.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -43,7 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorPalette.secondaryBackgroundColor,
+        backgroundColor: Colors.green,
         title: const Text('Edit Profile'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -89,7 +89,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           prefixIcon: Icon(icon, color: Colors.green),
           labelText: label,
           filled: true,
-          fillColor: ColorPalette.thirdBackgroundColor,
+          fillColor: Colors.green[50],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
