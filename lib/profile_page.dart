@@ -1,51 +1,104 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/edit_profile.dart';
-// import 'package:flutter_application_1/utils.dart';
-import 'package:flutter_application_1/login_page.dart'; // Import halaman login
+import 'package:flutter_application_1/login_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Map<String, dynamic>? _userData;
+
+  // Fungsi untuk mengambil data pengguna dari Firestore
+  Future<void> _fetchUserProfile() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        final doc = await _firestore.collection('users').doc(user.uid).get();
+        if (doc.exists) {
+          setState(() {
+            _userData = doc.data();
+          });
+        } else {
+          throw Exception("User data not found.");
+        }
+      } else {
+        throw Exception("User not logged in.");
+      }
+    } catch (e) {
+      _showErrorDialog("Error", e.toString());
+    }
+  }
+
+  // Dialog untuk menampilkan error
+  void _showErrorDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green, // Warna hijau sesuai tema
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.logout,
-              color:
-                  Colors.white, // Menggunakan color untuk mengatur warna ikon
-            ),
-            onPressed: () {
-              // Navigasi ke halaman login dan hapus semua rute sebelumnya
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () async {
+              await _auth.signOut();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-                (Route<dynamic> route) =>
-                    false, // Menghapus semua rute sebelumnya
+                (route) => false,
               );
             },
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildProfileHeader(),
-            const SizedBox(height: 30),
-            _buildProfileForm(),
-            const SizedBox(height: 30),
-            _buildEditButton(context),
-          ],
-        ),
-      ),
+      body: _userData == null
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildProfileHeader(_userData!['fullname']),
+                  const SizedBox(height: 30),
+                  _buildProfileForm(_userData!),
+                  const SizedBox(height: 30),
+                  _buildEditButton(context),
+                ],
+              ),
+            ),
     );
   }
 
-  // Header dengan gambar dan nama pengguna
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(String name) {
     return Stack(
       children: [
         Container(
@@ -67,16 +120,12 @@ class ProfilePage extends StatelessWidget {
               const CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Colors.green,
-                ), // Placeholder icon
+                child: Icon(Icons.person, size: 50, color: Colors.green),
               ),
               const SizedBox(height: 15),
-              const Text(
-                'Anisya',
-                style: TextStyle(
+              Text(
+                name,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -89,24 +138,19 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Formulir detail profil pengguna
-  Widget _buildProfileForm() {
+  Widget _buildProfileForm(Map<String, dynamic> userData) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          _buildProfileDetail(Icons.person, 'Anisya', false),
-          _buildProfileDetail(Icons.cake, 'January 16, 2002', false),
-          _buildProfileDetail(Icons.phone, '+62 818 123 4567', false),
-          _buildProfileDetail(Icons.camera_alt, '@anisya_instagram', false),
-          _buildProfileDetail(Icons.email, 'anisya@example.com', false),
+          _buildProfileDetail(Icons.person, userData['fullname'] ?? '-', false),
+          _buildProfileDetail(Icons.email, userData['email'] ?? '-', false),
           _buildProfileDetail(Icons.lock, '*********', true),
         ],
       ),
     );
   }
 
-  // Item detail profil dengan ikon
   Widget _buildProfileDetail(IconData icon, String value, bool isPassword) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -117,7 +161,7 @@ class ProfilePage extends StatelessWidget {
           hintText: value,
           filled: true,
           fillColor: Colors.green[50],
-          enabled: false, // Tidak bisa diedit langsung
+          enabled: false,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
@@ -127,7 +171,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Tombol Edit Profile
   Widget _buildEditButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {

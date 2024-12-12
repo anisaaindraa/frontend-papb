@@ -54,10 +54,11 @@ class _HomePageWithNavState extends State<HomePageWithNav> {
   List<Widget> _getPages() {
     return [
       const HomePage(), // Search Page
-      FavoritesPage(
-        favoriteWords: favoriteWords,
-        onRemove: _removeFavorite,
-      ), // Favorites Page dengan kata favorit
+      // FavoritesPage(
+      //   favoriteWords: favoriteWords,
+      //   onRemove: _removeFavorite,
+      // ), // Favorites Page dengan kata favorit
+      const FavoritesPage(),
       const QuizPage(), // Quiz Page
       const ProfilePage(), // Profile Page
     ];

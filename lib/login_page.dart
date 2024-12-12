@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/forgot_password.dart';
 import 'register_page.dart';
@@ -11,40 +13,103 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final db = FirebaseFirestore.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
   bool _rememberMe = false;
+  bool _isLoading = false;
 
-  void _login() {
-    if (_emailController.text == 'admin' &&
-        _passwordController.text == 'password') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePageWithNav(),
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Login Failed'),
-            content: const Text('Incorrect email or password.'),
-            backgroundColor: Colors.white,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+  // Fungsi login pengguna
+  void signIn() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showAlertDialog(
+          'Kesalahan', 'Tolong isi email dan password dengan lengkap.');
+      return;
     }
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      // Autentikasi login Firebase
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Periksa apakah email sudah diverifikasi
+      if (userCredential.user!.emailVerified) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePageWithNav(),
+          ),
+        );
+      } else {
+        // Jika email belum diverifikasi
+        _showAlertDialog(
+          "Verifikasi Email",
+          "Email Anda belum diverifikasi. Silakan periksa kotak masuk email Anda.",
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        _showAlertDialog(
+          'Pengguna Tidak Ditemukan',
+          'Email ini belum terdaftar. Silakan daftar terlebih dahulu.',
+        );
+      } else if (e.code == 'wrong-password') {
+        _showAlertDialog(
+          'Password Salah',
+          'Password yang Anda masukkan tidak sesuai. Silakan coba lagi.',
+        );
+      } else if (e.code == 'invalid-email') {
+        _showAlertDialog(
+          'Email Tidak Valid',
+          'Silakan masukkan alamat email yang valid.',
+        );
+      } else {
+        _showAlertDialog(
+          'Kesalahan',
+          'Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.',
+        );
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  // Fungsi untuk menampilkan dialog
+  void _showAlertDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Menutup dialog
+              },
+              child: const Text(
+                'Tutup',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -56,15 +121,13 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/login_pict2.jpg'), // Background image
+                image: AssetImage('assets/images/login_pict2.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Curved container
           Positioned(
-            top: 250, // Start below the curved container
+            top: 250,
             left: 0,
             right: 0,
             child: Center(
@@ -106,8 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _emailController,
                         decoration: InputDecoration(
                           labelText: 'Email',
-                          labelStyle: const TextStyle(
-                              color: Colors.green), // Set label color
+                          labelStyle: const TextStyle(color: Colors.green),
                           prefixIcon:
                               const Icon(Icons.person, color: Colors.green),
                           filled: true,
@@ -116,8 +178,6 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          floatingLabelBehavior:
-                              FloatingLabelBehavior.auto, // Keep label floating
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -126,8 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                           labelText: 'Password',
-                          labelStyle: const TextStyle(
-                              color: Colors.green), // Set label color
+                          labelStyle: const TextStyle(color: Colors.green),
                           prefixIcon:
                               const Icon(Icons.lock, color: Colors.green),
                           filled: true,
@@ -149,8 +208,6 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             },
                           ),
-                          floatingLabelBehavior:
-                              FloatingLabelBehavior.auto, // Keep label floating
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -189,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: _login,
+                        onPressed: _isLoading ? null : signIn,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
@@ -197,15 +254,19 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Center(
+                                child: Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                       ),
                       const SizedBox(height: 10),
                       Center(
@@ -223,19 +284,13 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 const TextSpan(
                                   text: 'Don\'t have an account? ',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight
-                                        .normal, // Normal weight for this part
-                                  ),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 TextSpan(
                                   text: 'Sign up',
                                   style: const TextStyle(
-                                    color:
-                                        Color(0xFF005700), // Dark green color
-                                    fontWeight:
-                                        FontWeight.bold, // Bold for "Sign up"
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
