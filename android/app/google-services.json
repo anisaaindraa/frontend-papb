@@ -2,14 +2,33 @@
   "project_info": {
     "project_number": "871723171858",
     "project_id": "dictionary-pad",
-    "storage_bucket": "dictionary-pad.appspot.com"
+    "storage_bucket": "dictionary-pad.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:871723171858:android:991441e3867175a7e718cb",
+        "android_client_info": {
+          "package_name": "com.anisya.dictionary_pad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDF2BtgvcKntPQK7MZo70qHsSIQudZ_Xzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:871723171858:android:e4bc00b9fe52ee60e718cb",
         "android_client_info": {
-          "package_name": "com.example.flutter_application_1"
+          "package_name": "com.anisya.dictionary_pad"
         }
       },
       "oauth_client": [],
